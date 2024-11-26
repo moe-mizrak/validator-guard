@@ -1,0 +1,56 @@
+{
+  "name": "moe-mizrak/validator-guard",
+  "description": "ValidatorGuard is a flexible Laravel package that leverages attributes to validate and guard method execution based on defined conditions, such as permissions, states, and dependencies.",
+  "keywords": [
+    "Moe Mizrak",
+    "laravel",
+    "laravel-validator-guard",
+    "ValidatorGuard",
+    "permission",
+    "state",
+    "dependency",
+    "validation"
+  ],
+  "type": "package",
+  "homepage": "https://github.com/moe-mizrak/validator-guard",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Moe Mizrak"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "laravel/pint": "^1.18"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^9.6.1",
+    "phpunit/phpunit": "^11.4",
+    "fakerphp/faker": "^1.24.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "MoeMizrak\\ValidatorGuard\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MoeMizrak\\ValidatorGuard\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "MoeMizrak\\ValidatorGuard\\ValidatorGuardServiceProvider"
+      ],
+      "aliases": {
+        "LaravelOpenrouter": "MoeMizrak\\ValidatorGuard\\Facades\\ValidatorGuard"
+      }
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
