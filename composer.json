@@ -9,7 +9,9 @@
     "permission",
     "state",
     "dependency",
-    "validation"
+    "validation",
+    "Attributes",
+    "Attribute Validation"
   ],
   "type": "package",
   "homepage": "https://github.com/moe-mizrak/validator-guard",
@@ -21,7 +23,7 @@
   ],
   "require": {
     "php": "^8.2",
-    "laravel/pint": "^1.18"
+    "moe-mizrak/validator-guard-core": "^1.0"
   },
   "require-dev": {
     "orchestra/testbench": "^9.6.1",
@@ -42,10 +44,7 @@
     "laravel": {
       "providers": [
         "MoeMizrak\\ValidatorGuard\\ValidatorGuardServiceProvider"
-      ],
-      "aliases": {
-        "LaravelOpenrouter": "MoeMizrak\\ValidatorGuard\\Facades\\ValidatorGuard"
-      }
+      ]
     }
   },
   "scripts": {
