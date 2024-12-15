@@ -75,8 +75,10 @@ class ValidatorGuardServiceProvider extends ServiceProvider
         if (! config('validator-guard-core')) {
             config(['validator-guard-core.attributes.before' => config('validator-guard.attributes.before')]);
             config(['validator-guard-core.attributes.after' => config('validator-guard.attributes.after')]);
-
             config(['validator-guard-core.class_list' => config('validator-guard.class_list')]);
+            config(['validator-guard-core.throw_exceptions' => config('validator-guard.throw_exceptions')]);
+            config(['validator-guard-core.log_exceptions' => config('validator-guard.log_exceptions')]);
+            config(['validator-guard-core.log_channel' => config('validator-guard.log_channel')]);
         }
 
         // Register ValidatorGuardCoreServiceProvider
