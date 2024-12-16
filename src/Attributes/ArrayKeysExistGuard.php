@@ -10,7 +10,17 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
 /**
  * ArrayKeysExistGuard checks whether array key exists in the method array result or array parameter.
  *
- * Usage examples: todo add
+ * Usage examples:
+ * #[ArrayKeysExistGuard(
+ *      keys: ['firstKey', 'secondKey'],
+ *      inParam: true,
+ *      paramPosition: 1
+ * )]
+ *
+ * #[ArrayKeysExistGuard(
+ *      keys: ['firstKey', 'secondKey'],
+ *      inMethodResult: true
+ * )]
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class ArrayKeysExistGuard implements ValidationAttributeInterface
