@@ -1,5 +1,6 @@
 <?php
 
+use MoeMizrak\ValidatorGuard\Attributes\ArrayKeysExistGuard;
 use MoeMizrak\ValidatorGuard\Attributes\IntervalGuard;
 use MoeMizrak\ValidatorGuard\Tests\Example;
 
@@ -15,6 +16,7 @@ return [
         // Attributes that will be handled after method execution
         'after' => [
             IntervalGuard::class,
+            ArrayKeysExistGuard::class,
         ]
     ],
 

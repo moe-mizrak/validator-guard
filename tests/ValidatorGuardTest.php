@@ -117,4 +117,53 @@ class ValidatorGuardTest extends TestCase
         /* EXECUTE */
         $service->inBetweenMethod($intValue);
     }
+
+    #[Test]
+    public function it_tests_when_array_key_does_NOT_exist_in_response()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->arrayKeysExistFailureMethod('random');
+    }
+
+    #[Test]
+    public function it_tests_when_array_key_does_NOT_exist_in_param()
+    {
+        /* SETUP */
+        $arrayParam = [
+            'firstParamKey' => 22,
+            'secondParamKey' => true,
+            'thirdParamKey' => 'randomString',
+        ];
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->arrayKeysExistFailureParamMethod(35, $arrayParam);
+    }
+
+    #[Test]
+    public function it_tests_when_array_keys_exist_both_in_param_and_in_method_result()
+    {
+        /* SETUP */
+        $arrayParam = [
+            'firstKey' => 22,
+            'secondKey' => true,
+            'thirdKey' => 'randomString',
+        ];
+        $methodResult = [
+            'firstKey' => 'firstValue',
+            'secondKey' => ['randomString' => 'randomValue'],
+        ];
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->arrayKeysExistBothParamAndResultMethod(35, $arrayParam);
+
+        /* ASSERT */
+        $this->assertEquals($result, $methodResult);
+    }
 }

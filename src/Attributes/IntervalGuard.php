@@ -50,11 +50,7 @@ final readonly class IntervalGuard implements ValidationAttributeInterface
     }
 
     /**
-     * Handles the validation logic for attributes.
-     *
-     * @param MethodContextData $methodContextData
-     *
-     * @return bool
+     * @inheritDoc
      */
     final public function handle(MethodContextData $methodContextData): bool
     {
