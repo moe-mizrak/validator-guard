@@ -1,6 +1,6 @@
 {
   "name": "moe-mizrak/validator-guard",
-  "description": "ValidatorGuard is a flexible Laravel package that leverages attributes to validate and guard method execution based on defined conditions, such as permissions, states, and dependencies.",
+  "description": "ValidatorGuard enables attribute-driven validation to control Laravel method behavior.",
   "keywords": [
     "Moe Mizrak",
     "laravel",
