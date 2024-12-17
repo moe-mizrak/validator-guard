@@ -77,4 +77,11 @@ class Example
     ): string {
         return $firstParam . ' ' . $secondParam;
     }
+
+    public function allowedValuesNullableMethod(
+        int $intParam,
+        #[AllowedValuesGuard(values: ['allowedString', 'anotherValue', null], paramPosition: 1)] ?string $stringParam = null
+    ): int {
+        return $intParam;
+    }
 }

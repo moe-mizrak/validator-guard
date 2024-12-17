@@ -220,4 +220,19 @@ class ValidatorGuardTest extends TestCase
         /* EXECUTE */
         $service->multipleAllowedValuesMethod($firstStringValue, $secondStringValue);
     }
+
+    #[Test]
+    public function it_tests_allowed_values_attribute_in_case_parameter_nullable()
+    {
+        /* SETUP */
+        $intValue = 55;
+        $stringValue = null;
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->allowedValuesNullableMethod($intValue, $stringValue);
+
+        /* ASSERT */
+        $this->assertEquals($result, $intValue);
+    }
 }
