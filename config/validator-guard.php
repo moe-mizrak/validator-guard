@@ -1,5 +1,7 @@
 <?php
 
+use MoeMizrak\ValidatorGuard\Attributes\AllowedValuesGuard;
+use MoeMizrak\ValidatorGuard\Attributes\ArrayKeysExistGuard;
 use MoeMizrak\ValidatorGuard\Attributes\IntervalGuard;
 use MoeMizrak\ValidatorGuard\Tests\Example;
 
@@ -10,11 +12,12 @@ return [
     'attributes' => [
         // Attributes that will be handled before method execution
         'before' => [
-
+            AllowedValuesGuard::class,
         ],
         // Attributes that will be handled after method execution
         'after' => [
             IntervalGuard::class,
+            ArrayKeysExistGuard::class,
         ]
     ],
 
@@ -23,7 +26,7 @@ return [
      * Basically whenever these classes are resolved by container, we initiate ValidatorGuardCore to mimic them as a wrapper and handle validation.
      */
     'class_list' => [
-        Example::class, // This is for testing purpose, can be commented out !
+        Example::class, // This is for testing purpose, can be removed !
     ],
 
     /**

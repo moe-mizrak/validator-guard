@@ -5,6 +5,11 @@ namespace MoeMizrak\ValidatorGuard;
 use Illuminate\Support\ServiceProvider;
 use MoeMizrak\ValidatorGuardCore\ValidatorGuardCoreServiceProvider;
 
+/**
+ * Service provider for ValidatorGuard
+ *
+ * @class ValidatorGuardServiceProvider
+ */
 class ValidatorGuardServiceProvider extends ServiceProvider
 {
     /**
