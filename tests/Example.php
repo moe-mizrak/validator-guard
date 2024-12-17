@@ -84,4 +84,11 @@ class Example
     ): int {
         return $intParam;
     }
+
+    public function allowedValuesNullMethod(
+        int $intParam,
+        #[AllowedValuesGuard(values: ['allowedString', 'anotherValue'], paramPosition: 1)] ?string $stringParam = null
+    ): int {
+        return $intParam;
+    }
 }

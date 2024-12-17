@@ -235,4 +235,17 @@ class ValidatorGuardTest extends TestCase
         /* ASSERT */
         $this->assertEquals($result, $intValue);
     }
+
+    #[Test]
+    public function it_tests_allowed_values_attribute_in_case_parameter_nullable_for_failure()
+    {
+        /* SETUP */
+        $intValue = 55;
+        $stringValue = null;
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->allowedValuesNullMethod($intValue, $stringValue);
+    }
 }
