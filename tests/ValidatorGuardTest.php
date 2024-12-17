@@ -166,4 +166,58 @@ class ValidatorGuardTest extends TestCase
         /* ASSERT */
         $this->assertEquals($result, $methodResult);
     }
+
+    #[Test]
+    public function it_tests_allowed_values_attribute_in_case_of_failure()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->allowedValuesMethod('notAllowedString', 55);
+    }
+
+    #[Test]
+    public function it_tests_allowed_values_attribute_in_case_validation_passes()
+    {
+        /* SETUP */
+        $intValue = 55;
+        $stringValue = 'allowedString';
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->allowedValuesMethod($stringValue, $intValue);
+
+        /* ASSERT */
+        $this->assertEquals($result, $intValue);
+    }
+
+    #[Test]
+    public function it_tests_multiple_allowed_values_attribute_in_case_validation_passes()
+    {
+        /* SETUP */
+        $firstStringValue = 'firstAllowedString';
+        $secondStringValue = 'secondAllowedString';
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->multipleAllowedValuesMethod($firstStringValue, $secondStringValue);
+
+        /* ASSERT */
+        $this->assertEquals($result, $firstStringValue . ' ' . $secondStringValue);
+    }
+
+    #[Test]
+    public function it_tests_multiple_allowed_values_attribute_in_case_of_failure()
+    {
+        /* SETUP */
+        $firstStringValue = 'firstAllowedString';
+        $secondStringValue = 'invalidString';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->multipleAllowedValuesMethod($firstStringValue, $secondStringValue);
+    }
 }

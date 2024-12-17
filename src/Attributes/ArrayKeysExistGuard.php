@@ -21,18 +21,18 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
  *      keys: ['firstKey', 'secondKey'],
  *      inMethodResult: true
  * )]
+ *
+ * @attribute ArrayKeysExistGuard
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
-class ArrayKeysExistGuard implements ValidationAttributeInterface
+final readonly class ArrayKeysExistGuard implements ValidationAttributeInterface
 {
     public function __construct(
         public array $keys,
         public ?bool $inMethodResult = false,
         public ?bool $inParam = false,
         public ?int $paramPosition = 0,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @inheritDoc
@@ -40,7 +40,7 @@ class ArrayKeysExistGuard implements ValidationAttributeInterface
     public function handle(MethodContextData $methodContextData): bool
     {
         // Handle the case for method result
-        if ($this->inMethodResult && ! $this->checkArrayKeys($methodContextData->methodResponse)) {
+        if ($this->inMethodResult && ! $this->checkArrayKeys($methodContextData->methodResult)) {
             return false;
         }
 

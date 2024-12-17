@@ -14,6 +14,8 @@ use InvalidArgumentException;
  * #[IntervalGuard(10, '<=', 30)] - Ensures method result is between 10 and 30 (inclusive)
  * #[IntervalGuard(10, '>')] - Ensures method result is strictly greater than 10
  * It is repeatable and can be used for cases like #[IntervalGuard(10, '<=')] #[IntervalGuard(30, '>')] means 10<=methodResult<30
+ *
+ * @attribute IntervalGuard
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final readonly class IntervalGuard implements ValidationAttributeInterface
@@ -54,7 +56,7 @@ final readonly class IntervalGuard implements ValidationAttributeInterface
      */
     final public function handle(MethodContextData $methodContextData): bool
     {
-        $result = $methodContextData->methodResponse;
+        $result = $methodContextData->methodResult;
 
         // Single bound evaluation
         if ($this->upperBound === null) {

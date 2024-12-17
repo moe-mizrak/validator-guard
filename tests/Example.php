@@ -2,6 +2,7 @@
 
 namespace MoeMizrak\ValidatorGuard\Tests;
 
+use MoeMizrak\ValidatorGuard\Attributes\AllowedValuesGuard;
 use MoeMizrak\ValidatorGuard\Attributes\ArrayKeysExistGuard;
 use MoeMizrak\ValidatorGuard\Attributes\IntervalGuard;
 
@@ -61,5 +62,19 @@ class Example
     public function arrayKeysExistBothParamAndResultMethod(int $intParam, array $arrayParam): array
     {
         return $this->returnArrayMethod();
+    }
+
+    public function allowedValuesMethod(
+        #[AllowedValuesGuard(values: ['allowedString', 'anotherValue'], paramPosition: 0)] string $stringParam,
+        int $intParam
+    ): int {
+        return $intParam;
+    }
+
+    public function multipleAllowedValuesMethod(
+        #[AllowedValuesGuard(values: ['firstAllowedString', 'anotherValue'], paramPosition: 0)] string $firstParam,
+        #[AllowedValuesGuard(values: ['secondAllowedString'], paramPosition: 1)] string $secondParam
+    ): string {
+        return $firstParam . ' ' . $secondParam;
     }
 }
