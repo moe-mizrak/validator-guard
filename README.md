@@ -108,7 +108,7 @@ VALIDATOR_GUARD_LOG_CHANNEL=
 ### Using Service Container Bindings
 
 ### Attributes
-More attributes will be added in the future. You can also create your custom attributes by implementing the `ValidationAttributeInterface` interface. How to create custom attributes is explained in the [Create Your Own Attribute](#create-your-own-attribute) section.
+More attributes will be added in the future. You can also create your custom attributes as explained in the [Create Your Own Attribute](#create-your-own-attribute) section.
 We will cover the following attributes in this section:
 * [IntervalGuard](#intervalguard)
 * [DateGuard](#dateguard)
