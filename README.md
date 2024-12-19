@@ -12,7 +12,7 @@ ValidatorGuard enables attribute-driven validation to control Laravel method beh
 
 - [🤖 Requirements](#-requirements)
 - [🏁 Get Started](#-get-started)
-- [⚙️Configuration](#-configuration)
+- [🧩 Configuration](#-configuration)
 - [🎨 Usage](#-usage)
     - [Using Helper](#using-helper)
     - [Using Service Container Bindings](#using-service-container-bindings)
@@ -88,7 +88,7 @@ return [
 ```
 </details>
 
-## ⚙️ Configuration
+## 🧩 Configuration
 After publishing the package configuration file, you'll need to add the following environment variables to your **.env** file:
 
 ```env
