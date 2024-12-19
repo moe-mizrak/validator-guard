@@ -4,6 +4,7 @@ namespace MoeMizrak\ValidatorGuard\Tests;
 
 use MoeMizrak\ValidatorGuard\Attributes\AllowedValuesGuard;
 use MoeMizrak\ValidatorGuard\Attributes\ArrayKeysExistGuard;
+use MoeMizrak\ValidatorGuard\Attributes\DateGuard;
 use MoeMizrak\ValidatorGuard\Attributes\IntervalGuard;
 
 class Example
@@ -65,29 +66,74 @@ class Example
     }
 
     public function allowedValuesMethod(
-        #[AllowedValuesGuard(values: ['allowedString', 'anotherValue'], paramPosition: 0)] string $stringParam,
+        #[AllowedValuesGuard(paramPosition: 0, values: ['allowedString', 'anotherValue'])] string $stringParam,
         int $intParam
     ): int {
         return $intParam;
     }
 
     public function multipleAllowedValuesMethod(
-        #[AllowedValuesGuard(values: ['firstAllowedString', 'anotherValue'], paramPosition: 0)] string $firstParam,
-        #[AllowedValuesGuard(values: ['secondAllowedString'], paramPosition: 1)] string $secondParam
+        #[AllowedValuesGuard(paramPosition: 0, values: ['firstAllowedString', 'anotherValue'])] string $firstParam,
+        #[AllowedValuesGuard(paramPosition: 1, values: ['secondAllowedString'])] string $secondParam
     ): string {
         return $firstParam . ' ' . $secondParam;
     }
 
     public function allowedValuesNullableMethod(
         int $intParam,
-        #[AllowedValuesGuard(values: ['allowedString', 'anotherValue', null], paramPosition: 1)] ?string $stringParam = null
+        #[AllowedValuesGuard(paramPosition: 1, values: ['allowedString', 'anotherValue', null])] ?string $stringParam = null
     ): int {
         return $intParam;
     }
 
     public function allowedValuesNullMethod(
         int $intParam,
-        #[AllowedValuesGuard(values: ['allowedString', 'anotherValue'], paramPosition: 1)] ?string $stringParam = null
+        #[AllowedValuesGuard(paramPosition: 1, values: ['allowedString', 'anotherValue'])] ?string $stringParam = null
+    ): int {
+        return $intParam;
+    }
+
+    public function dateBoundaryPastDateMethod(
+        int $intParam,
+        #[DateGuard(paramPosition: 1, boundary: DateGuard::PAST)] ?string $dateParam
+    ): int {
+        return $intParam;
+    }
+
+    public function dateBoundaryFutureDateMethod(
+        int $intParam,
+        #[DateGuard(paramPosition: 1, boundary: DateGuard::FUTURE)] ?string $dateParam
+    ): int {
+        return $intParam;
+    }
+
+    public function dateBoundaryBetweenDateRangeMissingMethod(
+        int $intParam,
+        #[DateGuard(paramPosition: 1, boundary: DateGuard::BETWEEN)] ?string $dateParam
+    ): int {
+        return $intParam;
+    }
+
+    public function dateBoundaryBetweenBoundaryLowerRangeMissingMethod(
+        int $intParam,
+        #[DateGuard(
+            paramPosition: 1,
+            boundary: DateGuard::BETWEEN,
+            range: ['upperBound' => '2054-12-12'])
+        ] ?string $dateParam
+    ): int {
+        return $intParam;
+    }
+
+    public function dateBoundaryBetweenBoundaryMethod(
+        int $intParam,
+        #[DateGuard(
+            paramPosition: 1,
+            boundary: DateGuard::BETWEEN,
+            range: [
+                'upperBound' => '2030-12-12',
+                'lowerBound' => '2020-12-12'
+            ])] ?string $dateParam
     ): int {
         return $intParam;
     }

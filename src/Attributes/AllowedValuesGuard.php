@@ -11,8 +11,8 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
  *
  * Usage examples:
  * multipleAllowedValuesMethod(
- *      #[AllowedValuesGuard(values: ['firstAllowedString', 'anotherValue'], paramPosition: 0)] string $firstParam,
- *      #[AllowedValuesGuard(values: ['secondAllowedString'], paramPosition: 1)] string $secondParam
+ *      #[AllowedValuesGuard(paramPosition: 0, values: ['firstAllowedString', 'anotherValue'])] string $firstParam,
+ *      #[AllowedValuesGuard(paramPosition: 1, values: ['secondAllowedString'])] string $secondParam
  * )
  *
  * @attribute AllowedValuesGuard
@@ -21,8 +21,8 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
 final readonly class AllowedValuesGuard implements ValidationAttributeInterface
 {
     public function __construct(
-        protected array $values = [],
-        protected int $paramPosition
+        private int $paramPosition,
+        private array $values = []
     ) {}
 
     /**

@@ -2,6 +2,8 @@
 
 namespace MoeMizrak\ValidatorGuard\Tests;
 
+use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use MoeMizrak\ValidatorGuardCore\Exceptions\ValidatorGuardCoreException;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -247,5 +249,113 @@ class ValidatorGuardTest extends TestCase
 
         /* EXECUTE */
         $service->allowedValuesNullMethod($intValue, $stringValue);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_past_date_when_date_param_is_null_which_should_pass()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = null;
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->dateBoundaryPastDateMethod($intParam, $dateParam);
+
+        /* ASSERT */
+        $this->assertEquals($result, $intParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_past_date_when_date_is_invalid_format()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $invalidDateParam = '2014-18-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(InvalidFormatException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryPastDateMethod($intParam, $invalidDateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_past_date_when_date_param_is_future_date()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryPastDateMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_future_date_when_date_param_is_past_date()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2004-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryFutureDateMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_boundary_is_used_but_range_is_missing()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryBetweenDateRangeMissingMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_date_range_is_used_but_range_lower_bound_key_missing()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(\InvalidArgumentException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryBetweenBoundaryLowerRangeMissingMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_date_range_passes()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2025-12-12 15:00:00';
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->dateBoundaryBetweenBoundaryMethod($intParam, $dateParam);
+
+        /* ASSERT */
+        $this->assertEquals($result, $intParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_date_range_failed()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryPastDateMethod($intParam, $dateParam);
     }
 }

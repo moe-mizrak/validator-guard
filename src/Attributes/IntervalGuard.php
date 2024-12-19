@@ -29,9 +29,9 @@ final readonly class IntervalGuard implements ValidationAttributeInterface
      * Constructor validates the provided comparison operator
      */
     public function __construct(
-        public float $lowerBound,
-        public string $operator = '<=',
-        public ?float $upperBound = null,
+        private float $lowerBound,
+        private string $operator = '<=',
+        private ?float $upperBound = null,
     ) {
         $this->validateOperator($this->operator);
     }
