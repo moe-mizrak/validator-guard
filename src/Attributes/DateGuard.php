@@ -79,20 +79,20 @@ final readonly class DateGuard implements ValidationAttributeInterface
         }
 
         return match ($this->boundary) {
-            self::FUTURE => $date->gt($now), // Check if $date is in the future
-            self::PAST => $date->lt($now), // Check if $date is in the past
+            self::FUTURE            => $date->gt($now), // Check if $date is in the future
+            self::PAST              => $date->lt($now), // Check if $date is in the past
             self::FUTURE_OR_PRESENT => $date->gte($now), // Check if $date is future or now
-            self::PAST_OR_PRESENT => $date->lte($now), // Check if $date is past or now
-            self::BETWEEN => ! is_null($range)
+            self::PAST_OR_PRESENT   => $date->lte($now), // Check if $date is past or now
+            self::BETWEEN           => ! is_null($range)
                 && $date->gt($lowerBound)
                 && $date->lt($upperBound), // Check if $date is between, range array has to be provided !
-            self::NOT_BETWEEN => ! is_null($range)
+            self::NOT_BETWEEN       => ! is_null($range)
                 && ! ($date->gt($lowerBound) && $date->lt($upperBound)), // Check if $date is not between, range array has to be provided !
-            self::WEEKDAYS => $date->isWeekday(), // Check if $date is a weekday
-            self::WEEKENDS => $date->isWeekend(), // Check if $date is a weekend
-            self::TODAY => $date->isToday(), // Check if $date is today
-            self::TOMORROW => $date->isTomorrow(), // Check if $date is tomorrow
-            default => false,
+            self::WEEKDAYS          => $date->isWeekday(), // Check if $date is a weekday
+            self::WEEKENDS          => $date->isWeekend(), // Check if $date is a weekend
+            self::TODAY             => $date->isToday(), // Check if $date is today
+            self::TOMORROW          => $date->isTomorrow(), // Check if $date is tomorrow
+            default                 => false,
         };
     }
 
