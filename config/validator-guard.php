@@ -2,6 +2,7 @@
 
 use MoeMizrak\ValidatorGuard\Attributes\AllowedValuesGuard;
 use MoeMizrak\ValidatorGuard\Attributes\ArrayKeysExistGuard;
+use MoeMizrak\ValidatorGuard\Attributes\CallbackGuard;
 use MoeMizrak\ValidatorGuard\Attributes\DateGuard;
 use MoeMizrak\ValidatorGuard\Attributes\IntervalGuard;
 use MoeMizrak\ValidatorGuard\Tests\Example;
@@ -15,6 +16,7 @@ return [
         'before' => [
             AllowedValuesGuard::class,
             DateGuard::class,
+            CallbackGuard::class,
         ],
         // Attributes that will be handled after method execution
         'after' => [

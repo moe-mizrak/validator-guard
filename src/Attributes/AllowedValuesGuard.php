@@ -32,6 +32,6 @@ final readonly class AllowedValuesGuard implements ValidationAttributeInterface
     {
         $param = Arr::get($methodContextData->params, $this->paramPosition);
 
-        return in_array($param, $this->values);
+        return in_array($param, $this->values, true);
     }
 }

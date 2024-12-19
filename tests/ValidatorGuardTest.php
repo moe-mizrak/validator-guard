@@ -2,7 +2,6 @@
 
 namespace MoeMizrak\ValidatorGuard\Tests;
 
-use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use MoeMizrak\ValidatorGuardCore\Exceptions\ValidatorGuardCoreException;
 use PHPUnit\Framework\Attributes\Test;
@@ -357,5 +356,66 @@ class ValidatorGuardTest extends TestCase
 
         /* EXECUTE */
         $service->dateBoundaryPastDateMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_not_provided_will_expect_void_result()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->callbackGuardExpectedResultNullMethod();
+
+        /* ASSERT */
+        $this->assertEquals($result, 'callbackGuardExpectedResultNullMethod response');
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_bool_passes()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->callbackGuardExpectedBoolMethod();
+
+        /* ASSERT */
+        $this->assertEquals($result, 'callbackGuardExpectedBoolMethod response');
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_bool_fails()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->callbackGuardExpectedBoolFailureMethod();
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_object_fails()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->callbackGuardExpectedObjectFailureMethod();
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_object_succeed()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->callbackGuardExpectedObjectSucceedMethod();
+
+        /* ASSERT */
+        $this->assertEquals($result, 'callbackGuardExpectedObjectSucceedMethod response');
     }
 }
