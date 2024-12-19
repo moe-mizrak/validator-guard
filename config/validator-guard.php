@@ -2,6 +2,8 @@
 
 use MoeMizrak\ValidatorGuard\Attributes\AllowedValuesGuard;
 use MoeMizrak\ValidatorGuard\Attributes\ArrayKeysExistGuard;
+use MoeMizrak\ValidatorGuard\Attributes\CallbackGuard;
+use MoeMizrak\ValidatorGuard\Attributes\DateGuard;
 use MoeMizrak\ValidatorGuard\Attributes\IntervalGuard;
 use MoeMizrak\ValidatorGuard\Tests\Example;
 
@@ -13,6 +15,8 @@ return [
         // Attributes that will be handled before method execution
         'before' => [
             AllowedValuesGuard::class,
+            DateGuard::class,
+            CallbackGuard::class,
         ],
         // Attributes that will be handled after method execution
         'after' => [
@@ -22,7 +26,7 @@ return [
     ],
 
     /**
-     * Here we add all classes that we use attributes validation in order to bind them to ValidatorGuardCore in Service Provider.
+     * Here we add all classes that we use attribute validation in order to bind them to ValidatorGuardCore in Service Provider.
      * Basically whenever these classes are resolved by container, we initiate ValidatorGuardCore to mimic them as a wrapper and handle validation.
      */
     'class_list' => [

@@ -28,10 +28,10 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
 final readonly class ArrayKeysExistGuard implements ValidationAttributeInterface
 {
     public function __construct(
-        public array $keys,
-        public ?bool $inMethodResult = false,
-        public ?bool $inParam = false,
-        public ?int $paramPosition = 0,
+        private array $keys,
+        private ?bool $inMethodResult = false,
+        private ?bool $inParam = false,
+        private ?int $paramPosition = 0,
     ) {}
 
     /**

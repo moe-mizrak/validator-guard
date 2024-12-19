@@ -2,6 +2,7 @@
 
 namespace MoeMizrak\ValidatorGuard\Tests;
 
+use Carbon\Exceptions\InvalidFormatException;
 use MoeMizrak\ValidatorGuardCore\Exceptions\ValidatorGuardCoreException;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -247,5 +248,174 @@ class ValidatorGuardTest extends TestCase
 
         /* EXECUTE */
         $service->allowedValuesNullMethod($intValue, $stringValue);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_past_date_when_date_param_is_null_which_should_pass()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = null;
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->dateBoundaryPastDateMethod($intParam, $dateParam);
+
+        /* ASSERT */
+        $this->assertEquals($result, $intParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_past_date_when_date_is_invalid_format()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $invalidDateParam = '2014-18-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(InvalidFormatException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryPastDateMethod($intParam, $invalidDateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_past_date_when_date_param_is_future_date()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryPastDateMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_future_date_when_date_param_is_past_date()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2004-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryFutureDateMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_boundary_is_used_but_range_is_missing()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryBetweenDateRangeMissingMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_date_range_is_used_but_range_lower_bound_key_missing()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(\InvalidArgumentException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryBetweenBoundaryLowerRangeMissingMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_date_range_passes()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2025-12-12 15:00:00';
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->dateBoundaryBetweenBoundaryMethod($intParam, $dateParam);
+
+        /* ASSERT */
+        $this->assertEquals($result, $intParam);
+    }
+
+    #[Test]
+    public function it_tests_date_boundary_guard_when_between_date_range_failed()
+    {
+        /* SETUP */
+        $intParam = 55;
+        $dateParam = '2054-12-12 15:00:00';
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->dateBoundaryPastDateMethod($intParam, $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_not_provided_will_expect_void_result()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->callbackGuardExpectedResultNullMethod();
+
+        /* ASSERT */
+        $this->assertEquals($result, 'callbackGuardExpectedResultNullMethod response');
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_bool_passes()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->callbackGuardExpectedBoolMethod();
+
+        /* ASSERT */
+        $this->assertEquals($result, 'callbackGuardExpectedBoolMethod response');
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_bool_fails()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->callbackGuardExpectedBoolFailureMethod();
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_object_fails()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $service->callbackGuardExpectedObjectFailureMethod();
+    }
+
+    #[Test]
+    public function it_tests_callback_guard_when_expected_result_object_succeed()
+    {
+        /* SETUP */
+        $service = valguard($this->example);
+
+        /* EXECUTE */
+        $result = $service->callbackGuardExpectedObjectSucceedMethod();
+
+        /* ASSERT */
+        $this->assertEquals($result, 'callbackGuardExpectedObjectSucceedMethod response');
     }
 }
