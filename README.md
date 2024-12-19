@@ -1,4 +1,6 @@
+
 # Validator Guard
+
 <br />
 
 [![Latest Version on Packagist](https://img.shields.io/badge/packagist-v1.0-blue)](https://packagist.org/packages/moe-mizrak/validator-guard)
@@ -40,7 +42,7 @@ php artisan vendor:publish --tag=validator-guard
 ```
 
 <details>
-<summary>This is the contents of the published config file</summary>
+<summary>This is the contents of the published config file:</summary>
 
 ```php
 return [
@@ -95,9 +97,9 @@ VALIDATOR_GUARD_LOG_EXCEPTIONS=
 VALIDATOR_GUARD_LOG_CHANNEL=
 ```
 
-- VALIDATOR_GUARD_THROW_EXCEPTIONS: Enable/Disable that whether package throws exception. Set true to enable and false to disable  (🚩default: true)
-- VALIDATOR_GUARD_LOG_EXCEPTIONS: Enable/Disable that whether package logs exception. Set true to enable and false to disable  (🚩default: false)
-- VALIDATOR_GUARD_LOG_CHANNEL: Set the default channel for logging exceptions. (🚩default: stack)
+- VALIDATOR_GUARD_THROW_EXCEPTIONS: Enable/Disable whether the package throws exceptions. Set true to enable and false to disable  (🚩default: true)
+- VALIDATOR_GUARD_LOG_EXCEPTIONS: Enable/Disable whether the package logs exceptions. Set true to enable and false to disable  (🚩default: false)
+- VALIDATOR_GUARD_LOG_CHANNEL: Set the default channel for logging exceptions (only applicable if VALIDATOR_GUARD_LOG_EXCEPTIONS is enabled). (🚩default: stack)
 
 ## 🎨 Usage
 
