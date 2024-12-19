@@ -131,7 +131,8 @@ We will cover the following attributes in this section:
 ## 💫 Contributing
 
 > **We welcome contributions!** f you'd like to improve this package, simply create a pull request with your changes. Your efforts help enhance its functionality and documentation. 
-> ⭐ If you find this package useful, please consider starring it to show your support! Your stars motivate us to keep improving and maintaining the project.
+
+> ⭐ If you find this package useful, please consider ⭐ it to show your support!
 
 ## 📜 License
 Validator Guard is an open-sourced software licensed under the **[MIT license](LICENSE)**.
