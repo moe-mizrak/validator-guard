@@ -97,9 +97,9 @@ VALIDATOR_GUARD_LOG_EXCEPTIONS=
 VALIDATOR_GUARD_LOG_CHANNEL=
 ```
 
-- VALIDATOR_GUARD_THROW_EXCEPTIONS: Enable/Disable that whether package throws exception. Set true to enable and false to disable  (default: true)
-- VALIDATOR_GUARD_LOG_EXCEPTIONS: Enable/Disable that whether package logs exception. Set true to enable and false to disable  (default: false)
-- VALIDATOR_GUARD_LOG_CHANNEL: Set the default channel for logging exceptions. (default: stack)
+- VALIDATOR_GUARD_THROW_EXCEPTIONS: Enable/Disable that whether package throws exception. Set true to enable and false to disable  (🚩default: true)
+- VALIDATOR_GUARD_LOG_EXCEPTIONS: Enable/Disable that whether package logs exception. Set true to enable and false to disable  (🚩default: false)
+- VALIDATOR_GUARD_LOG_CHANNEL: Set the default channel for logging exceptions. (🚩default: stack)
 
 ## 🎨 Usage
 
