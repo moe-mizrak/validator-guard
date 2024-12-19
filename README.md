@@ -12,7 +12,7 @@ ValidatorGuard enables attribute-driven validation to control Laravel method beh
 
 - [🤖 Requirements](#-requirements)
 - [🏁 Get Started](#-get-started)
-- [⚙️ Configuration](#-configuration)
+- [⚙️Configuration](#-configuration)
 - [🎨 Usage](#-usage)
     - [Using Helper](#using-helper)
     - [Using Service Container Bindings](#using-service-container-bindings)
