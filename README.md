@@ -130,7 +130,7 @@ We will cover the following attributes in this section:
 
 ## 💫 Contributing
 
-> **We welcome contributions!** f you'd like to improve this package, simply create a pull request with your changes. Your efforts help enhance its functionality and documentation. 
+> **Your contributions are welcome!** f you'd like to improve this package, simply create a pull request with your changes. Your efforts help enhance its functionality and documentation. 
 
 > If you find this package useful, please consider ⭐ it to show your support!
 
