@@ -45,8 +45,8 @@ php artisan vendor:publish --tag=validator-guard
 <summary>This is the contents of the published config file</summary>
 
 ```php
-
-/**
+return [
+    /**
      * Here add the attributes that are used for Validation Guard
      */
     'attributes' => [
@@ -84,7 +84,7 @@ php artisan vendor:publish --tag=validator-guard
      * Set an option for default channel for logging so that it can be configured when needed.
      */
     'log_channel' => env('VALIDATOR_GUARD_LOG_CHANNEL', 'stack'),
-
+]
 ```
 </details>
 
