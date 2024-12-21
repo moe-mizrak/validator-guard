@@ -111,10 +111,10 @@ VALIDATOR_GUARD_LOG_CHANNEL=
 ```
 
 ## 🎨 Usage
-There are two ways to use Validator Guard, either by using the **valguard helper** or by using **service container bindings**.
+There are two ways to use Validator Guard, either by using the **valguard helper** or **service container bindings**.
 
 > [!IMPORTANT]
-> Service container bindings method is not recommended for classes that cannot be resolved by the container, such as facades or helpers,
+> `Service container bindings` is not recommended for classes that cannot be resolved by the container, such as facades or helpers,
 > or for classes requiring parameters like runtime-specific data.
 > It is also unsuitable for objects that are short-lived, require complex setup, and so on.
 
@@ -197,7 +197,7 @@ We will cover the following attributes in this section:
 * [CallbackGuard](#callbackguard)
 * [ArrayKeysExistGuard](#arraykeysexistguard)
 
-> [!GLOSSARY]
+> [!TIP]
 > Attribute flags as follows:
 > TARGET_METHOD : Marks that attribute declaration is allowed only in class methods. 
 > IS_REPEATABLE : Attribute declaration in the same place is allowed multiple times.
