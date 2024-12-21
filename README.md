@@ -14,7 +14,7 @@ ValidatorGuard enables attribute-driven validation to control Laravel method beh
 - [🏁 Get Started](#-get-started)
 - [🧩 Configuration](#-configuration)
 - [🎨 Usage](#-usage)
-    - [Using Helper](#using-helper)
+    - [Using valguard Helper](#using-valguard-helper)
     - [Using Service Container Bindings](#using-service-container-bindings)
     - [Attributes](#attributes)
         - [IntervalGuard](#intervalguard)
@@ -36,7 +36,7 @@ You can **install** the package via composer:
 composer require moe-mizrak/validator-guard
 ```
 
-You can **publish** the **config file** with:
+You can **publish** the **validator-guard** config file with:
 ```bash
 php artisan vendor:publish --tag=validator-guard
 ```
@@ -64,8 +64,9 @@ return [
     ],
 
     /**
-     * Here we add all classes that we use attribute validation in order to bind them to ValidatorGuardCore in Service Provider.
+     * Here add all classes that you use attribute validation in order to bind them to ValidatorGuardCore in Service Provider.
      * Basically whenever these classes are resolved by container, we initiate ValidatorGuardCore to mimic them as a wrapper and handle validation.
+     * ! Note: You do NOT need to add classes that you use valguard helper method (Check the Usage section for more details).
      */
     'class_list' => [
     ],
@@ -89,7 +90,19 @@ return [
 </details>
 
 ## 🧩 Configuration
-After publishing the package configuration file, you'll need to add the following environment variables to your **.env** file:
+And the details of **validator-guard** config file options as follows:
+- **attributes**: Here add the attributes that are used for Validation Guard. You can add the attributes that will be handled before method execution to the **before** array, and the attributes that will be handled after method execution to the **after** array.
+Some attributes are already added to the config file. You can remove or add new attributes as needed. You can check the details of the attributes in the [Attributes](#attributes) section.
+  - **before**: Attributes processed before method execution, allowing validation to be handled upfront, which avoids unnecessary method calls and improves performance.
+  - **after**: Attributes processed after method execution, enabling validations that depend on method results or cases where method execution is needed (e.g., logging, database operations) even if validation fails.
+- **class_list**: Here add all classes that you use attribute validation in order to bind them to ValidatorGuardCore in the service provider.
+Whenever these classes are resolved by the container, the package will initiate the ValidatorGuardCore to mimic the classes as a wrapper and handle validation.
+Check the [Using Service Container Bindings](#using-service-container-bindings) section for more details.
+- **throw_exceptions**: Enable/Disable throwing exceptions in case of validation failure. (🚩default: true)
+- **log_exceptions**: Enable/Disable logging exceptions in case of validation failure. (🚩default: false)
+- **log_channel**: Set an option for the default channel for logging so that it can be configured when needed (only applicable if VALIDATOR_GUARD_LOG_EXCEPTIONS is enabled). (🚩default: stack)
+
+You can also set the **throw_exceptions**, **log_exceptions**, and **log_channel** options in the **.env** file as follows:
 
 ```env
 VALIDATOR_GUARD_THROW_EXCEPTIONS=
@@ -97,15 +110,83 @@ VALIDATOR_GUARD_LOG_EXCEPTIONS=
 VALIDATOR_GUARD_LOG_CHANNEL=
 ```
 
-- VALIDATOR_GUARD_THROW_EXCEPTIONS: Enable/Disable whether the package throws exceptions. Set true to enable and false to disable  (🚩default: true)
-- VALIDATOR_GUARD_LOG_EXCEPTIONS: Enable/Disable whether the package logs exceptions. Set true to enable and false to disable  (🚩default: false)
-- VALIDATOR_GUARD_LOG_CHANNEL: Set the default channel for logging exceptions (only applicable if VALIDATOR_GUARD_LOG_EXCEPTIONS is enabled). (🚩default: stack)
-
 ## 🎨 Usage
+There are two ways to use Validator Guard, either by using the **valguard helper** or by using **service container bindings**.
 
-### Using Helper
+> [!IMPORTANT]
+> Service container bindings method is not recommended for classes that cannot be resolved by the container, such as facades or helpers,
+> or for classes requiring parameters like runtime-specific data.
+> It is also unsuitable for objects that are short-lived, require complex setup, and so on.
+
+### Using valguard Helper
+Helper method **valguard** offers a simple way to use Validator Guard for classes that cannot be resolved by the container or require runtime-specific data.
+For example, if you have a class named **UserService**, and method named **getTransactionAmount** that you want to use for attribute validation:
+
+```php
+//class UserService
+#[IntervalGuard(lowerBound: 100, operator: '<=', upperBound: 10000)] // Transaction amount (method result) must be between 100 and 10,000
+public function getTransactionAmount(int $transactionId): float
+{
+    // Logic of transaction amount calculation
+}
+```
+
+You can use the **valguard** helper as follows:
+```php
+$service = new UserService(); // It does NOT have to be resolved by the container
+
+// Call the method by wrapping user service with valguard helper
+$amount = valguard($userService)->getTransactionAmount(1344); 
+/*
+ * If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config).
+ * If the transaction amount is between 100 and 10,000, the method will be executed and give the result.
+ */
+```
+(You can check the details of the **IntervalGuard** attribute in the [Attributes](#attributes) section.)
+
+
+> [!NOTE]
+> For **valguard** helper method, you do **NOT** need to add the classes that you use for attribute validation to the **class_list** in the configuration file.
+> And classes do **NOT** have to be resolved by the container.
 
 ### Using Service Container Bindings
+By using service container bindings, you need to add the classes that you use for attribute validation to the **class_list** in the configuration file.
+For the classes that you add to the **class_list**, the package will bind them to the ValidatorGuardCore in the service provider.
+So whenever these classes are resolved by the container, the package will initiate the ValidatorGuardCore to mimic the classes as a wrapper and handle validation.
+    
+For example, if you have a class named **UserService** that you want to use for attribute validation, you need to add the class to the **class_list** in the configuration file as follows:
+```php
+"class_list" => [
+    UserService::class,
+]
+```
+
+And let's say you have a method named **getTransactionAmount** in the **UserService** class that you want to validate the attributes.
+You can add the attributes that you want to validate to the method as follows:
+```php
+//class UserService
+#[IntervalGuard(lowerBound: 100, operator: '<=', upperBound: 10000)] // Transaction amount (method result) must be between 100 and 10,000
+public function getTransactionAmount(int $transactionId): float
+{
+    // Logic of transaction amount calculation
+}
+```
+
+In this example, the **getTransactionAmount** method will be validated by the **IntervalGuard** attribute after the method execution.
+(You can check the details of the **IntervalGuard** attribute in the [Attributes](#attributes) section.)
+
+And whenever UserService is resolved by the container (e.g. Dependency Injection, app() helper etc.), the package will initiate the ValidatorGuardCore to mimic the UserService as a wrapper and handle validation:
+```php
+// Resolve UserService from the container
+$userService = app(UserService::class);
+
+// Call the method
+$amount = $userService->getTransactionAmount(1344); 
+/*
+ * If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config).
+ * If the transaction amount is between 100 and 10,000, the method will be executed and give the result.
+ */
+```
 
 ### Attributes
 More attributes will be added in the future. You can also create your custom attributes as explained in the [Create Your Own Attribute](#create-your-own-attribute) section.
