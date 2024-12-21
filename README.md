@@ -255,7 +255,7 @@ public function getTransactionAmount(int $transactionId): float
 In this example, the `getTransactionAmount` method result will be validated by the `IntervalGuard` attribute twice after the method execution.
 The first validation will check if the transaction amount is bigger than 10, and the second validation will check if the transaction amount is less than or equal to 30.
 
-- Potential Use Cases for `IntervalGuard` Attribute:
+- Potential use-cases for `IntervalGuard` Attribute:
     - Age Validation:
     ```php
     #[IntervalGuard(18, '<=')] // Age must be bigger than 18 (inclusive)
@@ -264,7 +264,7 @@ The first validation will check if the transaction amount is bigger than 10, and
         // Logic of user age calculation
     }
     ```
-  - Login Attempt Monitoring:
+    - Login Attempt Monitoring:
     ```php
     #[IntervalGuard(0, '<=', 5)] // Maximum 5 login attempts allowed
     public function loginAttempts(string $username): int
@@ -272,7 +272,7 @@ The first validation will check if the transaction amount is bigger than 10, and
         // Logic of login attempts calculation
     }
     ```
-  - Credit Score Validation:
+    - Credit Score Validation:
     ```php
     #[IntervalGuard(100, '<')] // Credit score must be bigger than 800
     public function getCreditScore(int $userId): int
@@ -326,7 +326,7 @@ valguard($userService)->createEvent('2023-12-31');
     * **upper_bound** (string): The upper bound of the date range.
     * **lower_bound** (string): The lower bound of the date range.
 
-- Potential Use Cases for `DateGuard` Attribute:
+- Potential use-cases for `DateGuard` Attribute:
   - Subscription Management:
     ```php
     public function subscribeUser(
