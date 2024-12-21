@@ -323,8 +323,8 @@ valguard($userService)->createEvent('2023-12-31');
     * **DateGuard::TODAY**: The date must be today.
     * **DateGuard::TOMORROW**: The date must be tomorrow.
 * **range** (array|null): The range of dates, it must include **upper_bound** and **lower_bound** keys. (🚩required if boundary is BETWEEN or NOT_BETWEEN)
-    * **upper_bound** (string): The upper bound of the date range.
-    * **lower_bound** (string): The lower bound of the date range.
+    * **upper_bound** (string): The upper bound of the date range. (🚩required if range array is provided)
+    * **lower_bound** (string): The lower bound of the date range. (🚩required if range array is provided)
 
 - Potential use-cases for `DateGuard` Attribute:
   - Subscription Management:
