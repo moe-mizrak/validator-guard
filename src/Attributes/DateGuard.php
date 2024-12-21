@@ -44,7 +44,7 @@ final readonly class DateGuard implements ValidationAttributeInterface
 
     public function __construct(
         private int $paramPosition,
-        private ?string $boundary = null,
+        private string $boundary,
         private ?array $range = null,
     ) {
         $this->validateBoundary($boundary);
