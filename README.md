@@ -116,6 +116,7 @@ There are two ways to use Validator Guard, either by using the **valguard helper
 > [!IMPORTANT]
 > `Service container bindings` is not recommended for classes that cannot be resolved by the container, such as facades or helpers,
 > or for classes requiring parameters like runtime-specific data.
+> 
 > It is also unsuitable for objects that are short-lived, require complex setup, and so on.
 
 ### Using valguard Helper
