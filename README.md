@@ -200,9 +200,9 @@ We will cover the following attributes in this section:
 
 > [!TIP]
 > Attribute flags as follows:
-> - TARGET_METHOD : Marks that attribute declaration is allowed only in class methods. 
-> - IS_REPEATABLE : Attribute declaration in the same place is allowed multiple times.
-> - TARGET_PARAMETER: Marks that attribute declaration is allowed only in function or method parameters.
+> - `TARGET_METHOD` : Marks that attribute declaration is allowed only in class methods. 
+> - `IS_REPEATABLE` : Attribute declaration in the same place is allowed multiple times.
+> - `TARGET_PARAMETER` : Marks that attribute declaration is allowed only in function or method parameters.
 
 Glossary:
 
@@ -272,7 +272,7 @@ The first validation will check if the transaction amount is bigger than 10, and
         // Logic of login attempts calculation
     }
     ```
-    - Credit Score Validation:
+  - Credit Score Validation:
     ```php
     #[IntervalGuard(100, '<')] // Credit score must be bigger than 800
     public function getCreditScore(int $userId): int
@@ -353,7 +353,7 @@ valguard($userService)->createEvent('2023-12-31');
     }
     ```
   - Reservation System:
-  ```php
+    ```php
     public function makeReservation(
         bool $isRoomAvailable,
         #[DateGuard(
@@ -364,7 +364,7 @@ valguard($userService)->createEvent('2023-12-31');
     ): void {
         // Logic to make a reservation
     }
-  ```
+    ```
   
 There can be many other use cases for the `DateGuard` attribute. You can use it for any method that requires date validation for the method parameter.
 
