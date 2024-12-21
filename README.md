@@ -199,9 +199,9 @@ We will cover the following attributes in this section:
 
 > [!TIP]
 > Attribute flags as follows:
-> TARGET_METHOD : Marks that attribute declaration is allowed only in class methods. 
-> IS_REPEATABLE : Attribute declaration in the same place is allowed multiple times.
-> TARGET_PARAMETER: Marks that attribute declaration is allowed only in function or method parameters.
+> - TARGET_METHOD : Marks that attribute declaration is allowed only in class methods. 
+> - IS_REPEATABLE : Attribute declaration in the same place is allowed multiple times.
+> - TARGET_PARAMETER: Marks that attribute declaration is allowed only in function or method parameters.
 
 Glossary:
 
