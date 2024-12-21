@@ -133,7 +133,7 @@ public function getTransactionAmount(int $transactionId): float
 
 You can use the **valguard** helper as follows:
 ```php
-$service = new UserService(); // It does NOT have to be resolved by the container
+$userService = new UserService(); // It does NOT have to be resolved by the container
 
 // Call the method by wrapping user service with valguard helper
 $amount = valguard($userService)->getTransactionAmount(1344); 
@@ -189,7 +189,7 @@ $amount = $userService->getTransactionAmount(1344);
 ```
 
 ### Attributes
-More attributes will be added in the future. You can also create your custom attributes as explained in the [Create Your Own Attribute](#create-your-own-attribute) section.
+More attributes will be added in the future. You can also create/add your custom attributes as explained in the [Create Your Own Attribute](#create-your-own-attribute) section.
 We will cover the following attributes in this section:
 * [IntervalGuard](#intervalguard)
 * [DateGuard](#dateguard)
@@ -198,6 +198,79 @@ We will cover the following attributes in this section:
 * [ArrayKeysExistGuard](#arraykeysexistguard)
 
 #### IntervalGuard
+The `IntervalGuard` attribute is used to validate the method result within a specified interval.
+
+Sample usage:
+```php
+//class UserService
+#[IntervalGuard(lowerBound: 100, operator: '<=', upperBound: 10000)] // Transaction amount (method result) must be between 100 and 10,000
+public function getTransactionAmount(int $transactionId): float
+{
+    // Logic of transaction amount calculation
+}
+```
+
+And when the `getTransactionAmount` method is called, the result will be validated by the `IntervalGuard` attribute after the method execution.
+```php
+// Initiate UserService class
+$userService = new UserService();
+// Call the method
+$amount = valguard($userService)->getTransactionAmount(1344); 
+```
+
+In this example, the `getTransactionAmount` method result will be validated by the `IntervalGuard` attribute after the method execution.
+
+* **lowerBound** (float): The lower bound of the interval. (🚩required)
+* **operator** (string): The operator to be used for comparison. (🚩required)
+    * **'<'**: Less than
+    * **'<='**: Less than or equal to
+    * **'=='**: Equal to
+    * **'!='**: Not equal to
+    * **'>'**: Greater than
+    * **'>='**: Greater than or equal to
+* **upperBound** (float|null): The upper bound of the interval. (🚩required)
+
+`IntervalGuard` attribute is repeatable, so you can add multiple `IntervalGuard` attributes to the same method.
+For instance:
+```php
+#[IntervalGuard(lowerBound: 10, operator: '<')]
+#[IntervalGuard(lowerBound: 30, operator: '>=')]
+public function getTransactionAmount(int $transactionId): float
+{
+    // Logic of transaction amount calculation
+}
+```
+
+In this example, the `getTransactionAmount` method result will be validated by the `IntervalGuard` attribute twice after the method execution.
+The first validation will check if the transaction amount is bigger than 10, and the second validation will check if the transaction amount is less than or equal to 30.
+
+- Potential Use Cases for `IntervalGuard` Attribute:
+    - Age Validation:
+    ```php
+    #[IntervalGuard(18, '>=')] // Age must be bigger than 18 (inclusive)
+    public function calculateUserAge(): int
+    {
+        // Logic of user age calculation
+    }
+    ```
+  - Login Attempt Monitoring:
+    ```php
+    #[IntervalGuard(0, '<=', 5)] // Maximum 5 login attempts allowed
+    public function loginAttempts(string $username): int
+    {
+        // Logic of login attempts calculation
+    }
+    ```
+    - Credit Score Validation:
+    ```php
+    #[IntervalGuard(100, '<=')] // Credit score must be bigger than 800
+    public function getCreditScore(int $userId): int
+    {
+        // Logic of credit score calculation
+    }
+    ```
+
+There can be many other use cases for the `IntervalGuard` attribute. You can use it for any method that requires interval validation for the method result.
 
 #### DateGuard
 
