@@ -119,7 +119,7 @@ There are two ways to use Validator Guard, either by using the **valguard helper
 > 
 > It is also unsuitable for objects that are short-lived, require complex setup, and so on.
 
-### Using valguard Helper
+### Using **valguard** Helper
 Helper method **valguard** offers a simple way to use Validator Guard for classes that cannot be resolved by the container or require runtime-specific data.
 For example, if you have a class named **UserService**, and method named **getTransactionAmount** that you want to use for attribute validation:
 
