@@ -137,7 +137,8 @@ You can use the **valguard** helper as follows:
 $userService = new UserService(); // It does NOT have to be resolved by the container
 
 // Call the method by wrapping user service with valguard helper
-$amount = valguard($userService)->getTransactionAmount(1344); 
+$transactionId = 1344;
+$amount = valguard($userService)->getTransactionAmount($transactionId); 
 /*
  * If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config).
  * If the transaction amount is between 100 and 10,000, the method will be executed and give the result.
@@ -182,7 +183,8 @@ And whenever UserService is resolved by the container (e.g. Dependency Injection
 $userService = app(UserService::class);
 
 // Call the method
-$amount = $userService->getTransactionAmount(1344); 
+$transactionId = 1344;
+$amount = $userService->getTransactionAmount($transactionId); 
 /*
  * If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config).
  * If the transaction amount is between 100 and 10,000, the method will be executed and give the result.
@@ -228,7 +230,8 @@ And when the `getTransactionAmount` method is called, the result will be validat
 $userService = new UserService();
 
 // Call the method
-$amount = valguard($userService)->getTransactionAmount(1344); 
+$transactionId = 1344;
+$amount = valguard($userService)->getTransactionAmount($transactionId); 
 ```
 
 `InntervalGuard` attribute parameters:
@@ -307,7 +310,8 @@ And when the `createEvent` method is called, the `eventDate` parameter will be v
 $userService = new UserService();
 
 // Call the method
-valguard($userService)->createEvent('2023-12-31'); 
+$eventDate = '2023-12-31';
+valguard($userService)->createEvent($eventDate); 
 ```
 
 `DateGuard` attribute parameters:
@@ -391,7 +395,8 @@ And when the `createEvent` method is called, the `eventType` parameter will be v
 $userService = new UserService();
 
 // Call the method
-valguard($userService)->createEvent('meeting'); 
+$eventType = 'meeting';
+valguard($userService)->createEvent($eventType); 
 ```
 
 `AllowedValuesGuard` attribute parameters:
@@ -438,6 +443,98 @@ valguard($userService)->createEvent('meeting');
 There can be many other use cases for the `AllowedValuesGuard` attribute. You can use it for any method that requires allowed values validation for the method parameter.
 
 #### CallbackGuard
+The `CallbackGuard` attribute is used to invoke a specified class method with given parameters and validate its result against the expected value.
+Attribute flag for the `CallbackGuard`: TARGET_METHOD, IS_REPEATABLE
+
+`CallbackGuard` is listed in the **before** array in the configuration file **attributes** option because it validates the method parameter before the method execution.
+
+Sample usage:
+```php
+// class UserService
+#[CallbackGuard(
+    className: PaymentGateway::class,
+    methodName: 'isPaymentMethodSupported',
+    params: ['credit_card', 'US'],
+    expectedResult: true
+)]
+public function processPayment(int $paymentId): void 
+{
+    // Logic of payment processing
+}
+```
+
+And when the `processPayment` method is called, the `isPaymentMethodSupported` method of the `PaymentGateway` class will be invoked with the given parameters,
+and the result of `isPaymentMethodSupported` method will be validated by the `CallbackGuard` attribute before the `processPayment` method execution.
+```php
+// Initiate UserService class
+$userService = new UserService();
+
+// Call the method
+$paymentId = 134;
+valguard($userService)->processPayment($paymentId); 
+```
+
+`CallbackGuard` attribute parameters:
+* **className** (string): The class name of the callback method. (🚩required)
+* **methodName** (string): The method name of the callback method. (🚩required)
+* **params** (array|null): The parameters to be passed to the callback method.
+* **expectedResult** (mixed): The expected result of the callback method. It can be any type: string, null, int, bool, array, object etc.
+
+- Potential use-cases for `CallbackGuard` Attribute:
+  - Active Payment Methods:
+    ```php
+    #[CallbackGuard(
+        className: PaymentService::class,
+        methodName: 'getPaymentMethods',
+        expectedResult: new PaymentMethodsDTO([
+            'credit_card',
+            'paypal',
+            'bank_transfer',
+        ])
+    )]
+    public function processPayment(int $paymentId): void 
+    {
+        // Logic of payment processing
+    }
+    ```
+  - User Permissions/Authentications:
+    ```php
+    #[CallbackGuard(
+        className: PermissionService::class,
+        methodName: 'allowedPermissions',
+        params: ['admin'],
+        expectedResult: ['read', 'write', 'delete']
+    )]
+    public function getUserData(int $userId): array
+    {
+        // Logic to get user data
+    }
+    ```
+  - Withdraw Availability:
+    ```php
+    #[CallbackGuard(
+        className: BalanceService::class,
+        methodName: 'balanceStatus',
+        expectedResult: "active"
+    )]
+    public function withdraw(): bool 
+    {
+        // Logic to withdraw
+    }
+    ```
+  - Subscription Management:
+    ```php
+    #[CallbackGuard(
+        className: SubscriptionService::class,
+        methodName: 'isSubscriptionActive',
+        params: ["monthly"],
+        expectedResult: true
+    )]
+    public function fetchSubscriptionData(): array
+    {
+        // Fetch subscription data
+    }
+    ```
 
 #### ArrayKeysExistGuard
 
