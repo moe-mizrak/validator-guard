@@ -8,6 +8,28 @@
 
 ValidatorGuard enables attribute-driven validation to control Laravel method behavior.
 
+---
+
+_Attribute validation is a powerful way to validate method parameters, method results, and method behavior in a declarative way._
+
+```php
+// class UserService
+#[IntervalGuard(lowerBound: 100, operator: '<=', upperBound: 10000)] // Transaction amount (method result) must be between 100 and 10,000
+public function getTransactionAmount(int $transactionId): float
+{
+    // Logic of transaction amount calculation
+}
+```
+
+```php
+$userService = app(UserService::class);
+
+$transactionId = 1344;
+$amount = $userService->getTransactionAmount($transactionId); 
+```
+
+_If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config)._
+
 ## Table of Contents
 
 - [🤖 Requirements](#-requirements)
@@ -660,7 +682,7 @@ final readonly class NewAttribute implements ValidationAttributeInterface
 - Add the new attribute class to the **attributes** array in the `validator-guard` config file. 
   - If the newly created attribute validation logic in `handle` method requires method execution 
 (e.g. It makes use of method result, you do some logging or database operations which are crucial etc.) then add the attribute to the **after** array.
-  - Otherwise, add it to the **before** array in case the attribute validation logic does not require method execution.
+  - Otherwise, add it to the **before** array in case the attribute validation logic does not require method execution. This will improve performance by avoiding unnecessary method calls.
 
 <details>
 <summary>Config file:</summary>
