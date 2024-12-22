@@ -136,8 +136,8 @@ You can use the **valguard** helper as follows:
 ```php
 $userService = new UserService(); // It does NOT have to be resolved by the container
 
-// Call the method by wrapping user service with valguard helper
 $transactionId = 1344;
+// Call the method by wrapping user service with valguard helper
 $amount = valguard($userService)->getTransactionAmount($transactionId); 
 /*
  * If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config).
@@ -153,7 +153,7 @@ $amount = valguard($userService)->getTransactionAmount($transactionId);
 
 ### Using Service Container Bindings
 By using **service container bindings**, you need to add the classes that you use for attribute validation to the **class_list** in the configuration file.
-For the classes that you add to the **class_list**, the package will bind them to the ValidatorGuardCore in the service provider.
+For the classes that you add to the **class_list**, the package will bind them to the **ValidatorGuardCore** in the service provider.
 So whenever these classes are resolved by the container, the package will initiate the ValidatorGuardCore to mimic the classes as a wrapper and handle validation.
     
 For example, if you have a class named **UserService** that you want to use for attribute validation, you need to add the class to the **class_list** in the configuration file as follows:
@@ -177,7 +177,7 @@ public function getTransactionAmount(int $transactionId): float
 In this example, the **getTransactionAmount** method will be validated by the **IntervalGuard** attribute after the method execution.
 (You can check the details of the **IntervalGuard** attribute in the [Attributes](#attributes) section.)
 
-And whenever UserService is resolved by the container (e.g. Dependency Injection, app() helper etc.), the package will initiate the ValidatorGuardCore to mimic the UserService as a wrapper and handle validation:
+And whenever UserService is resolved by the container (e.g. Dependency Injection, app() helper etc.), the package will initiate the **ValidatorGuardCore** to mimic the UserService as a wrapper and handle validation:
 ```php
 // Resolve UserService from the container
 $userService = app(UserService::class);
@@ -202,13 +202,13 @@ We will cover the following attributes in this section:
 
 > [!TIP]
 > Attribute flags as follows:
-> - `TARGET_METHOD` : Marks that attribute declaration is allowed only in class methods. 
-> - `IS_REPEATABLE` : Attribute declaration in the same place is allowed multiple times.
-> - `TARGET_PARAMETER` : Marks that attribute declaration is allowed only in function or method parameters.
+> - **TARGET_METHOD** : Marks that attribute declaration is allowed only in class methods. 
+> - **IS_REPEATABLE** : Attribute declaration in the same place is allowed multiple times.
+> - **TARGET_PARAMETER** : Marks that attribute declaration is allowed only in function or method parameters.
 
 #### IntervalGuard
 The `IntervalGuard` attribute is used to validate the method result within a specified interval.
-Attribute flags for the `IntervalGuard`: TARGET_METHOD, IS_REPEATABLE
+Attribute flags for the `IntervalGuard`: **TARGET_METHOD**, **IS_REPEATABLE**
 
 `IntervalGuard` is listed in the **after** array in the configuration file **attributes** option because it validates the method result after the method execution.
 
@@ -227,8 +227,8 @@ And when the `getTransactionAmount` method is called, the result will be validat
 // Initiate UserService class
 $userService = new UserService();
 
-// Call the method
 $transactionId = 1344;
+// Call the method
 $amount = valguard($userService)->getTransactionAmount($transactionId); 
 ```
 
@@ -242,6 +242,8 @@ $amount = valguard($userService)->getTransactionAmount($transactionId);
     * **'>'**: Greater than
     * **'>='**: Greater than or equal to
 * **upperBound** (float|null): The upper bound of the interval.
+
+Basically it checks: `lowerBound < result < upperBound` or `lowerBound <= result <= upperBound` based on the operator and son on.
 
 `IntervalGuard` attribute is **repeatable**, so you can add multiple `IntervalGuard` attributes to the same method.
 For instance:
@@ -260,7 +262,7 @@ The first validation will check if the transaction amount is bigger than 10, and
 - Potential use-cases for `IntervalGuard` Attribute:
     - Age Validation:
     ```php
-    #[IntervalGuard(18, '<=')] // Age must be bigger than 18 (inclusive)
+    #[IntervalGuard(lowerBound: 18, operator: '<=')] // Age must be bigger than 18 (inclusive)
     public function calculateUserAge(): int
     {
         // Logic of user age calculation
@@ -268,7 +270,7 @@ The first validation will check if the transaction amount is bigger than 10, and
     ```
     - Login Attempt Monitoring:
     ```php
-    #[IntervalGuard(0, '<=', 5)] // Maximum 5 login attempts allowed
+    #[IntervalGuard(lowerBound: 0, operator: '<=', upperBound: 5)] // Maximum 5 login attempts allowed
     public function loginAttempts(string $username): int
     {
         // Logic of login attempts calculation
@@ -276,7 +278,7 @@ The first validation will check if the transaction amount is bigger than 10, and
     ```
     - Credit Score Validation:
     ```php
-    #[IntervalGuard(100, '<')] // Credit score must be bigger than 800
+    #[IntervalGuard(lowerBound: 100, operator: '<')] // Credit score must be bigger than 800
     public function getCreditScore(int $userId): int
     {
         // Logic of credit score calculation
@@ -287,7 +289,7 @@ There can be many other use cases for the `IntervalGuard` attribute. You can use
 
 #### DateGuard
 The `DateGuard` attribute is used to validate whether the given date parameter is in the future, past, weekdays, weekends, today, tomorrow or between two dates and so on.
-Attribute flag for the `DateGuard`: TARGET_PARAMETER
+Attribute flag for the `DateGuard`: **TARGET_PARAMETER**
 
 `DateGuard` is listed in the **before** array in the configuration file **attributes** option because it validates the method parameter before the method execution,
 which benefits the performance by avoiding unnecessary method execution.
@@ -307,8 +309,8 @@ And when the `createEvent` method is called, the `eventDate` parameter will be v
 // Initiate UserService class
 $userService = new UserService();
 
-// Call the method
 $eventDate = '2023-12-31';
+// Call the method
 valguard($userService)->createEvent($eventDate); 
 ```
 
@@ -373,7 +375,7 @@ There can be many other use cases for the `DateGuard` attribute. You can use it 
 
 #### AllowedValuesGuard
 The `AllowedValuesGuard` attribute is used to validate whether the given parameter is one of the allowed values.
-Attribute flag for the `AllowedValuesGuard`: TARGET_PARAMETER
+Attribute flag for the `AllowedValuesGuard`: **TARGET_PARAMETER**
 
 `AllowedValuesGuard` is listed in the **before** array in the configuration file **attributes** option because it validates the method parameter before the method execution.
 
@@ -392,8 +394,8 @@ And when the `createEvent` method is called, the `eventType` parameter will be v
 // Initiate UserService class
 $userService = new UserService();
 
-// Call the method
 $eventType = 'meeting';
+// Call the method
 valguard($userService)->createEvent($eventType); 
 ```
 
@@ -442,7 +444,7 @@ There can be many other use cases for the `AllowedValuesGuard` attribute. You ca
 
 #### CallbackGuard
 The `CallbackGuard` attribute is used to invoke a specified class method with given parameters and validate its result against the expected value.
-Attribute flag for the `CallbackGuard`: TARGET_METHOD, IS_REPEATABLE
+Attribute flag for the `CallbackGuard`: **TARGET_METHOD**, **IS_REPEATABLE**
 
 `CallbackGuard` is listed in the **before** array in the configuration file **attributes** option because it validates the method parameter before the method execution.
 
@@ -467,8 +469,8 @@ and the result of `isPaymentMethodSupported` method will be validated by the `Ca
 // Initiate UserService class
 $userService = new UserService();
 
-// Call the method
 $paymentId = 134;
+// Call the method
 valguard($userService)->processPayment($paymentId); 
 ```
 
@@ -538,7 +540,7 @@ There can be many other use cases for the `CallbackGuard` attribute. You can use
 
 #### ArrayKeysExistGuard
 The `ArrayKeysExistGuard` attribute is used to validate whether array key exists in the method array result or array parameter.
-Attribute flag for the `ArrayKeysExistGuard`: TARGET_METHOD, IS_REPEATABLE
+Attribute flag for the `ArrayKeysExistGuard`: **TARGET_METHOD**, **IS_REPEATABLE**
 
 `ArrayKeysExistGuard` is listed in the **after** array in the configuration file **attributes** option because it validates the method result after the method execution, along with method parameters.
 
@@ -560,8 +562,8 @@ And when the `getUserData` method is called, the result array will be validated 
 // Initiate UserService class
 $userService = new UserService();
 
-// Call the method
 $userId = 134;
+// Call the method
 $userData = valguard($userService)->getUserData($userId); 
 ```
 
@@ -702,8 +704,8 @@ public function testMethod(string $param): string
 // Initiate UserService class
 $userService = new UserService();
 
-// Call the method
 $param = 'validParam';
+// Call the method
 $result = valguard($userService)->testMethod($param);
 ```
 </details>
