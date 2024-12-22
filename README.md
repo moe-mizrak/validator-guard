@@ -152,7 +152,7 @@ $amount = valguard($userService)->getTransactionAmount($transactionId);
 > And classes do **NOT** have to be resolved by the container.
 
 ### Using Service Container Bindings
-By using service container bindings, you need to add the classes that you use for attribute validation to the **class_list** in the configuration file.
+By using **service container bindings**, you need to add the classes that you use for attribute validation to the **class_list** in the configuration file.
 For the classes that you add to the **class_list**, the package will bind them to the ValidatorGuardCore in the service provider.
 So whenever these classes are resolved by the container, the package will initiate the ValidatorGuardCore to mimic the classes as a wrapper and handle validation.
     
@@ -205,8 +205,6 @@ We will cover the following attributes in this section:
 > - `TARGET_METHOD` : Marks that attribute declaration is allowed only in class methods. 
 > - `IS_REPEATABLE` : Attribute declaration in the same place is allowed multiple times.
 > - `TARGET_PARAMETER` : Marks that attribute declaration is allowed only in function or method parameters.
-
-Glossary:
 
 #### IntervalGuard
 The `IntervalGuard` attribute is used to validate the method result within a specified interval.
@@ -623,6 +621,92 @@ $userData = valguard($userService)->getUserData($userId);
 There can be many other use cases for the `ArrayKeysExistGuard` attribute. You can use it for any method that requires array key validation for the method result or method parameter.
 
 ### Create Your Own Attribute
+You can create your custom attribute quite easily and use it for attribute validation. For this purpose, follow the steps below:
+- Create a new attribute class that implements the `ValidationAttributeInterface` interface. (`use MoeMizrak\ValidatorGuardCore\Contracts\ValidationAttributeInterface;`)
+
+<details>
+<summary>Sample attribute:</summary>
+
+```php
+use Illuminate\Support\Arr;
+use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
+use MoeMizrak\ValidatorGuardCore\Contracts\ValidationAttributeInterface;
+
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+final readonly class NewAttribute implements ValidationAttributeInterface
+{
+    public function __construct(
+        private int $paramPosition, // We get the param position to retrieve the parameter value from method params, this is the way we know which parameter to validate since name of the method parameter is not accessible
+        private string $stringValue
+    ) {}
+
+    public function handle(MethodContextData $methodContextData): bool
+    {
+        // Validation logic
+        $result = $methodContextData->methodResult; // Method result
+        $methodParams = $methodContextData->methodParams; // Method parameters
+        
+        $paramData = Arr::get($methodParams, $this->paramPosition); // Get the parameter value from method params
+        
+        return ! is_null($paramData) && $result === $this->stringValue;
+    }
+}
+```
+
+</details>
+
+- Add the new attribute class to the **attributes** array in the `validator-guard` config file. 
+  - If the newly created attribute validation logic in `handle` method requires method execution 
+(e.g. It makes use of method result, you do some logging or database operations which are crucial etc.) then add the attribute to the **after** array.
+  - Otherwise, add it to the **before** array in case the attribute validation logic does not require method execution.
+
+<details>
+<summary>Config file:</summary>
+
+```php
+'attributes' => [
+    
+    'before' => [
+        AllowedValuesGuard::class,
+        DateGuard::class,
+        CallbackGuard::class,
+    ],
+    
+    'after' => [
+        IntervalGuard::class,
+        ArrayKeysExistGuard::class,
+        NewAttribute::class, // Add the new attribute to the after array (or before array based on the requirement)
+    ]
+],
+```
+</details>
+
+- Now you can use the new attribute for attribute validation in your methods as explained in the [Usage](#-usage) section.
+> [!NOTE]
+> Check out [Using Service Container Bindings](#using-service-container-bindings) and [Using valguard Helper](#using-valguard-helper) sections for more details
+> in order to decide how to trigger the attribute validation.
+
+<details>
+<summary>Usage example:</summary>
+
+```php
+// class UserService
+#[NewAttribute(paramPosition: 0, stringValue: 'test')]
+public function testMethod(string $param): string
+{
+    return 'test';
+}
+```
+
+```php
+// Initiate UserService class
+$userService = new UserService();
+
+// Call the method
+$param = 'validParam';
+$result = valguard($userService)->testMethod($param);
+```
+</details>
 
 ## 💫 Contributing
 
