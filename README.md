@@ -10,8 +10,6 @@ ValidatorGuard enables attribute-driven validation to control Laravel method beh
 
 ---
 
-<small>
-
 _Attribute validation is a powerful way to validate method parameters, method results, and method behavior in a declarative way._
 
 ```php
@@ -31,8 +29,6 @@ $amount = valguard($userService)->getTransactionAmount($transactionId);
 ```
 
 _If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config)._
-
-</small>
 
 ## Table of Contents
 
