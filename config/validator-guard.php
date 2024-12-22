@@ -28,6 +28,7 @@ return [
     /**
      * Here we add all classes that we use attribute validation in order to bind them to ValidatorGuardCore in Service Provider.
      * Basically whenever these classes are resolved by container, we initiate ValidatorGuardCore to mimic them as a wrapper and handle validation.
+     * ! Note: You do NOT need to add classes that you use valguard helper method (Check the Usage section in README for more details).
      */
     'class_list' => [
         Example::class, // This is for testing purpose, can be removed !
