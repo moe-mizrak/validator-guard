@@ -91,16 +91,16 @@ return [
 
 ## 🧩 Configuration
 And the details of **validator-guard** config file options as follows:
-- **attributes**: Here add the attributes that are used for Validation Guard. You can add the attributes that will be handled before method execution to the **before** array, and the attributes that will be handled after method execution to the **after** array.
+- **attributes**: Here add the attributes that are used for `Validation Guard`. You can add the attributes that will be handled before method execution to the **before** array, and the attributes that will be handled after method execution to the **after** array.
 Some attributes are already added to the config file. You can remove or add new attributes as needed. You can check the details of the attributes in the [Attributes](#attributes) section.
   - **before**: Attributes processed before method execution, allowing validation to be handled upfront, which avoids unnecessary method calls and improves performance.
   - **after**: Attributes processed after method execution, enabling validations that depend on method results or cases where method execution is needed (e.g., logging, database operations) even if validation fails.
-- **class_list**: Here add all classes that you use attribute validation in order to bind them to ValidatorGuardCore in the service provider.
-Whenever these classes are resolved by the container, the package will initiate the ValidatorGuardCore to mimic the classes as a wrapper and handle validation.
+- **class_list**: Here add all classes that you use attribute validation in order to bind them to `ValidatorGuardCore` in the service provider.
+Whenever these classes are resolved by the container, the package will initiate the `ValidatorGuardCore` to mimic the classes as a wrapper and handle validation.
 Check the [Using Service Container Bindings](#using-service-container-bindings) section for more details.
 - **throw_exceptions**: Enable/Disable throwing exceptions in case of validation failure. (🚩default: true)
 - **log_exceptions**: Enable/Disable logging exceptions in case of validation failure. (🚩default: false)
-- **log_channel**: Set an option for the default channel for logging so that it can be configured when needed (only applicable if VALIDATOR_GUARD_LOG_EXCEPTIONS is enabled). (🚩default: stack)
+- **log_channel**: Set an option for the default channel for logging so that it can be configured when needed (only applicable if `VALIDATOR_GUARD_LOG_EXCEPTIONS` is enabled). (🚩default: stack)
 
 You can also set the **throw_exceptions**, **log_exceptions**, and **log_channel** options in the **.env** file as follows:
 
@@ -154,7 +154,7 @@ $amount = valguard($userService)->getTransactionAmount($transactionId);
 ### Using Service Container Bindings
 By using **service container bindings**, you need to add the classes that you use for attribute validation to the **class_list** in the configuration file.
 For the classes that you add to the **class_list**, the package will bind them to the **ValidatorGuardCore** in the service provider.
-So whenever these classes are resolved by the container, the package will initiate the ValidatorGuardCore to mimic the classes as a wrapper and handle validation.
+So whenever these classes are resolved by the container, the package will initiate the **ValidatorGuardCore** to mimic the classes as a wrapper and handle validation.
     
 For example, if you have a class named **UserService** that you want to use for attribute validation, you need to add the class to the **class_list** in the configuration file as follows:
 ```php
