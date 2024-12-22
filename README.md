@@ -399,12 +399,12 @@ valguard($userService)->createEvent('meeting');
 * **values** (array): The allowed values for the parameter. (🚩required)
 
 - Potential use-cases for `AllowedValuesGuard` Attribute:
-  - Region-Specific Operations:
+  - Language Selection:
     ```php
-    public function getWeatherForecast(
-        #[AllowedValuesGuard(paramPosition: 1, values: ['US', 'EU', 'APAC'])] string $region
-    ): array {
-        // Logic to get weather forecast
+    public function selectLanguage(
+        #[AllowedValuesGuard(paramPosition: 0, values: ['en', 'tr', 'de', 'fr'])] string $language
+    ): void {
+        // Logic to select a language
     }
     ```
   - User Role Assignment:
