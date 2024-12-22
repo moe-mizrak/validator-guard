@@ -535,8 +535,92 @@ valguard($userService)->processPayment($paymentId);
         // Fetch subscription data
     }
     ```
+    
+There can be many other use cases for the `CallbackGuard` attribute. You can use it for any method that requires callback method validation before the method execution.
 
 #### ArrayKeysExistGuard
+The `ArrayKeysExistGuard` attribute is used to validate whether array key exists in the method array result or array parameter.
+Attribute flag for the `ArrayKeysExistGuard`: TARGET_METHOD, IS_REPEATABLE
+
+`ArrayKeysExistGuard` is listed in the **after** array in the configuration file **attributes** option because it validates the method result after the method execution, along with method parameters.
+
+Sample usage:
+```php
+// class UserService
+#[ArrayKeysExistGuard(
+    keys: ['name', 'email'],
+    inMethodResult: true
+)] // name and email keys must exist in the method result array
+public function getUserData(int $userId): array
+{
+    // Logic to get user data
+}
+```
+
+And when the `getUserData` method is called, the result array will be validated by the `ArrayKeysExistGuard` attribute after the method execution.
+```php
+// Initiate UserService class
+$userService = new UserService();
+
+// Call the method
+$userId = 134;
+$userData = valguard($userService)->getUserData($userId); 
+```
+
+`ArrayKeysExistGuard` attribute parameters:
+* **keys** (array): The keys to be checked in the array. (🚩required)
+* **inMethodResult** (bool|null): If true, the keys will be checked in the method result array. If false while `inParam` is true, the keys will be checked in the method parameter array.
+* **inParam** (bool|null): If true, the keys will be checked in the method parameter array.
+* **paramPosition** (int|null): The position of the parameter in the method. (🚩required if `inParam` is true)
+
+- Potential use-cases for `ArrayKeysExistGuard` Attribute:
+  - Validating API Responses:
+    ```php
+    #[ArrayKeysExistGuard(
+        keys: ['status', 'data'],
+        inMethodResult: true
+    )]
+    public function fetchApiResponse(): array 
+    {
+        // API call logic
+    }
+    ```
+  - Order Data Validation:
+    ```php
+    #[ArrayKeysExistGuard(
+        keys: ['product_id', 'quantity'],
+        inMethodResult: true
+    )]
+    public function getOrderData(int $orderId): array
+    {
+        // Logic to get order data
+    }
+    ```
+  - Validating Request Parameters:
+    ```php
+    #[ArrayKeysExistGuard(
+        keys: ['user_id', 'email'],
+        inParam: true,
+        paramPosition: 0
+    )]
+    public function handleRequest(array $request): void 
+    {
+        // Handle request logic
+    }
+    ```
+  - Payment Gateway Payload Validation:
+    ```php
+    #[ArrayKeysExistGuard(
+        keys: ['amount', 'currency', 'payment_method'],
+        inParam: true,
+        paramPosition: 1
+    )]
+    public function initiatePayment(int $paymentId, array $payload): void {
+        // Payment processing logic
+    }
+    ```
+    
+There can be many other use cases for the `ArrayKeysExistGuard` attribute. You can use it for any method that requires array key validation for the method result or method parameter.
 
 ### Create Your Own Attribute
 
