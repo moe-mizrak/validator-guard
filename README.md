@@ -226,6 +226,7 @@ And when the `getTransactionAmount` method is called, the result will be validat
 ```php
 // Initiate UserService class
 $userService = new UserService();
+
 // Call the method
 $amount = valguard($userService)->getTransactionAmount(1344); 
 ```
@@ -369,6 +370,72 @@ valguard($userService)->createEvent('2023-12-31');
 There can be many other use cases for the `DateGuard` attribute. You can use it for any method that requires date validation for the method parameter.
 
 #### AllowedValuesGuard
+The `AllowedValuesGuard` attribute is used to validate whether the given parameter is one of the allowed values.
+Attribute flag for the `AllowedValuesGuard`: TARGET_PARAMETER
+
+`AllowedValuesGuard` is listed in the **before** array in the configuration file **attributes** option because it validates the method parameter before the method execution.
+
+Sample usage:
+```php
+// class UserService
+public function createEvent(
+    #[AllowedValuesGuard(paramPosition: 0, values: ['meeting', 'party', 'wedding'])] string $eventType
+): void {
+    // Logic to create an event
+}
+```
+
+And when the `createEvent` method is called, the `eventType` parameter will be validated by the `AllowedValuesGuard` attribute before the method execution.
+```php
+// Initiate UserService class
+$userService = new UserService();
+
+// Call the method
+valguard($userService)->createEvent('meeting'); 
+```
+
+`AllowedValuesGuard` attribute parameters:
+* **paramPosition** (int): The position of the parameter in the method. (🚩required)
+* **values** (array): The allowed values for the parameter. (🚩required)
+
+- Potential use-cases for `AllowedValuesGuard` Attribute:
+  - Region-Specific Operations:
+    ```php
+    public function getWeatherForecast(
+        #[AllowedValuesGuard(paramPosition: 1, values: ['US', 'EU', 'APAC'])] string $region
+    ): array {
+        // Logic to get weather forecast
+    }
+    ```
+  - User Role Assignment:
+    ```php
+    public function assignRole(
+        int $userId,
+        #[AllowedValuesGuard(paramPosition: 1, values: ['admin', 'user', 'guest'])] string $role
+    ): void {
+        // Logic to assign a role
+    }
+    ```
+  - Payment Method Validation:
+    ```php
+    public function makePayment(
+        #[AllowedValuesGuard(paramPosition: 0, values: ['credit_card', 'paypal', 'bank_transfer'])] string $paymentMethod
+    ): void {
+        // Logic to make a payment
+    }
+    ```
+  - Order Status Update:
+    ```php
+    public function updateOrderStatus(
+        int $orderId,
+        #[AllowedValuesGuard(paramPosition: 1, values: ['pending', 'shipped', 'delivered', 'cancelled'])] string $status,
+        #[AllowedValuesGuard(paramPosition: 2, values: ['false', 'true'])] bool $isPaid
+    ): bool {
+        // Logic to update order status
+    }
+    ```
+    
+There can be many other use cases for the `AllowedValuesGuard` attribute. You can use it for any method that requires allowed values validation for the method parameter.
 
 #### CallbackGuard
 
