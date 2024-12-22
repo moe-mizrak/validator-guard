@@ -22,10 +22,10 @@ public function getTransactionAmount(int $transactionId): float
 ```
 
 ```php
-$userService = new UserService();
+$userService = app(UserService::class);
 
 $transactionId = 1344;
-$amount = valguard($userService)->getTransactionAmount($transactionId); 
+$amount = $userService->getTransactionAmount($transactionId); 
 ```
 
 _If the transaction amount is not between 100 and 10,000, the exception will be thrown/logged (based on throwing or logging enabled in config)._
