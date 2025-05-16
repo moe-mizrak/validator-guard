@@ -6,6 +6,10 @@
 [![Latest Version on Packagist](https://img.shields.io/badge/packagist-v1.0-blue)](https://packagist.org/packages/moe-mizrak/validator-guard)
 <br />
 
+<a href="https://reboosty-reboosty.vercel.app/api?repo_url=https://github.com/moe-mizrak/validator-guard" target="_blank">
+  <img src="https://reboosty-reboosty.vercel.app/api?repo_url=https://github.com/moe-mizrak/validator-guard" alt="reboosty" />
+</a>
+
 ValidatorGuard enables attribute-driven validation to control Laravel method behavior.
 
 ---
